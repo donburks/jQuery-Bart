@@ -1,0 +1,35 @@
+#bart_wrapper {
+	text-align: left;	
+	display: none;
+}
+
+#bart_text {
+	font-family: Arial, Helvetica, Sans-serif;
+	font-size: 14px;
+}
+
+#bart_icon {
+	float: left;
+	margin: 18px;
+}
+
+#bart_title {
+	font-weight: bold;
+}
+
+#bart_close {
+	float: right;
+	margin: 8px;
+}
+
+#bart_icon img, #bart_close img { 
+	margin: 0; 
+	border: 0; 
+	padding: 0; 
+}
+
+#bart_wrapper.bart_bubble {
+	width: 200px;
+	height: 100px;
+
+}
