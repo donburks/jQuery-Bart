@@ -1,0 +1,15 @@
+jQuery BART - Don Burks (c)2011
+
+A notification plugin for jQuery, or more appropriately an 'annoyification' plugin. Bart, of course, is a popular character from a long-running TV show who is well-known for things like spiky hair, yellow skin, and of course, being good at attracting attention to himself. As the purpose of this plugin is to present content on the page that will attract the user's attention, it seemed to be a fitting name. If you feel that it's an appropriate name, then all the better.
+
+However, if you feel, as some might, that I am trading heavily on the brand of the above-mentioned show(which I haven't mentioned by name), then you can be 
+very assured that BART is an acronym meaning:
+Broadcasting And Reporting Things
+
+Users are used to seeing notifications in various ways appear on their computer. Whether you are a Mac, Linux, or PC user, those notifications typically appear in one of six places: Top, Bottom, Top Right, Bottom Right, Top Left, Bottom Left. Notifications typically are either a bar, or a bubble. IM programs, for example, have an industry standard of popping up a bubble-style notification in the bottom right of your screen when someone logs in or when you get a new message. Users of web browsers know about the "information bar" which will descend from the top of the screen when the user needs to be notified of something.
+
+Previously, if you wanted to mimic these types of notification behaviours in your page, you would have to find a separate plugin to do each type.  Now, Bart gives you the ability to have just one plugin which will handle all your notification needs. 
+
+Of course, the author recognizes that notifications can be occasionally annoying to the user, so the term 'annoyification' has been coined. That's right, I wordified that. 
+
+Bart is easy to use. It is also highly-configurable, and both of these traits should appeal to users. 
