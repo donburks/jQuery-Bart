@@ -13,3 +13,37 @@ Previously, if you wanted to mimic these types of notification behaviours in you
 Of course, the author recognizes that notifications can be occasionally annoying to the user, so the term 'annoyification' has been coined. That's right, I wordified that. 
 
 Bart is easy to use. It is also highly-configurable, and both of these traits should appeal to users. 
+
+Using BART is easy. When you want to trigger an annoyification, call the .bart(0 function. It can be called on any DOM element, though its behaviour is not tied to any particular element in the DOM. It's easiest just to call it on 'body'.
+Example: 
+	$("body").bart();
+
+Of course, that will get you an error bubble notification in the bottom right that says Cowabunga. If you want different behaviour from your annoyification, pass it an object of parameters to change the functionality.
+Example:
+	$("body").bart({'type': 'bar', 'vposition': 'top', 'style': 'warning'});
+
+Here are the possible parameters (and default values) that can be passed to BART:
+		'type'			: 'bubble',		//modal, bubble, or bar
+		'style'			: 'error',		//info, notice, warning, error, success
+		'vposition'		: 'bottom',		//top or bottom
+		'hposition'		: 'right',		//right or left
+		'slide'			: 'vertical',	//vertical or horizontal
+		'opacity'		: '0.8', 		//0 - 1
+		'easing'		: 'linear',		//linear or swing
+		'duration'		: 3000,			//Duration (in ms)
+		'speed'			: 600,			//Animation speed (in ms)
+		'title'			: "D'oh!",		//Title
+		'message'		: 'Cowabunga',	//Message (can be HTML)
+		'sticky'		: false,		//Boolean
+		'imgDir'		: 'images/',	//Default directory for bart's images, with trailing slash
+		'css'			: {},			//Any additional CSS parameters, in object notation
+		'animate'		: true,			//Whether to use CSS3 animated bg
+		'callback'		: function(){}	//Callback function after notification closes
+
+If you are going to pass CSS parameters into the plugin, use the same object notation that you would use if using the jQuery .css() function.
+Example: {'font-weight':'bold', 'margin-left': '10px'}
+
+Credit where it is due:
+I was originally inspired to write this seeing the post on Queness web blog from Red Team Design(http://www.red-team-design.com/cool-notification-messages-with-css3-jquery) as well as Zac Stewart's Meow jQuery Plugin (http://zacstewart.com/2011/06/18/meow-a-growl-work-alike-for-jquery.html). Both are excellent work, and the main design of the CSS3 animated bg in this plugin comes from the Red Team Design post.
+Additionally, credit goes to Ryan Neufeld (http://www.neucode.org) for a good tip on how to pass the animation settings for showing and hiding the notifications.
+
