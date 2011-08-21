@@ -1,5 +1,5 @@
 /*
- * jQuery Bart: Annoyification plugin - v0.1 - 08/04/2011
+ * jQuery Bart: Annoyification plugin - v0.1 - 08/21/2011
  * http://www.vankoder.com/
  * 
  * Copyright (c) 2011 Don Burks
