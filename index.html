@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+<title>Bart Test</title>
+<link rel="stylesheet" href="jquery.bart.min.css" />
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+<script src="jquery.bart.min.js"></script>
+<script>
+	var modal_1 = {
+			'type'		: 'modal',
+			'style'		: 'info',
+			'title'		: 'Hey!',
+			'message'	: 'This is info!'
+	},
+		modal_2 = {
+			'type'		: 'modal',
+			'style'		: 'error',
+			'title'		: 'Oops!',
+			'message'	: 'An error occured',
+			'sticky'	: true
+	},
+		bubble_1 = {
+			'type'		: 'bubble',
+			'style'		: 'notice',
+			'vposition'	: 'top',
+			'hposition'	: 'left',
+			'title'		: 'Bazinga',
+			'message'	: "I'm up here.",
+			'opacity'	: 1
+		},
+		bubble_2 = {
+			'type'		: 'bubble',
+			'style'		: 'warning',
+			'vposition'	: 'bottom',
+			'hposition' : 'right',
+			'slide'		: 'horizontal',
+			'title'		: 'Lana!',
+			'message'	: 'Daanjah Zone!'
+		},
+		bubble_3 = {
+			'type'		: 'bubble',
+			'style'		: 'success',
+			'sticky'	: true,
+			'vposition'	: 'top',
+			'hposition' : 'right',
+			'title'		: 'Eureka',
+			'message'	: 'Click for a surprise',
+			'callback'	: function () { alert("Surprise!"); }
+		},
+		bar_1 = {
+			'type'		: 'bar',
+			'style'		: 'info',
+			'slide'		: 'horizontal',
+			'hposition' : 'left',
+			'title'		: 'Whoa!',
+			'message'	: 'Almost fell off there...',
+			'animate'	: false
+		},
+		bar_2 = {
+			'type'		: 'bar',
+			'style'		: 'error',
+			'css'		: {'color':'#000'},
+			'title'		: 'Extra CSS',
+			'message'	: 'My text is black',
+			'vposition' : 'top',
+			'hposition' : 'right',
+			'slide'		: 'vertical'
+		},
+		bar_3 = {
+			'type'		: 'bar',
+			'style'		: 'success',
+			'vposition' : 'bottom',
+			'slide'		: 'vertical',
+			'title'		: 'Be proud!',
+			'message'	: 'You clicked a button!'
+		};
+</script>
+</head>
+<style>
+	body { text-align: center; }
+	#main { text-align: left; width: 550px; left; margin: 100px auto; }
+	.desc { width: 400px; display: block; clear: both; float: left;}
+	button { width: 90px; }
+</style>
+<body>
+<div id="main">
+	<b>BART Demonstrations</b><br />
+	<span class="desc">Modal, Info</span><button onclick="$('body').bart(modal_1)">Modal 1</button><br />
+	<span class="desc">Modal, Error, Sticky</span><button onclick="$('body').bart(modal_2)">Modal 2</button><br />
+	<span class="desc">Bubble, Notice, Top Left, Vertical Slide</span><button onclick="$('body').bart(bubble_1)">Bubble 1</button><br />
+	<span class="desc">Bubble, Warning, Bottom Right, Horizontal Slide</span><button onclick="$('body').bart(bubble_2)">Bubble 2</button><br />
+	<span class="desc">Bubble, Success, Top Right, Vertical Slide, Sticky, Callback</span><button onclick="$('body').bart(bubble_3)">Bubble 3</button><br />
+	<span class="desc">Bar, Info, Bottom Left, Horizontal Slide, No Animation</span><button onclick="$('body').bart(bar_1)">Bar 1</button><br />
+	<span class="desc">Bar, Error, Top Right, Vertical Slide, CSS</span><button onclick="$('body').bart(bar_2)">Bar 2</button><br />
+	<span class="desc">Bar, Success, Bottom Right, Vertical Slide</span><button onclick="$('body').bart(bar_3)">Bar 3</button><br />
+</div>
+</body>
+</html>
