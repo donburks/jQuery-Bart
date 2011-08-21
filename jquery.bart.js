@@ -4,68 +4,110 @@
  * 
  * Copyright (c) 2011 Don Burks
  * Dual licensed under the MIT and GPL licenses.
+ *
  */
 
-(function($){
+;(function($){
 	//Plugin default values
 	var defaults = { 
-		'type'			: 'bubble',		//Default type of annoyification
-		'style'			: 'error',		//Default style of annoyification
-		'vposition'		: 'bottom',		//Default vertical position
-		'hposition'		: 'right',		//Default horizontal position
-		'opacity'		: '0.8', 		//Default opacity
-		'easing'		: 'linear',		//Default easing
-		'duration'		: 2000,			//Default duration (in ms)
-		'speed',		: 600,			//Default animation speed (in ms)
-		'title'			: "D'oh!",		//Default title
-		'message'		: 'Cowabunga',	//Default message 
-		'sticky'		: false,		//Default stickiness
-		'imgDir'		: '/images/'	//Default directory for bart's images
+		'type'			: 'bubble',		//modal, bubble, or bar
+		'style'			: 'error',		//info, notice, warning, error, success
+		'vposition'		: 'bottom',		//top or bottom
+		'hposition'		: 'right',		//right or left
+		'slide'			: 'vertical',	//vertical or horizontal
+		'opacity'		: '0.8', 		//0 - 1
+		'easing'		: 'linear',		//linear or swing
+		'duration'		: 3000,			//Duration (in ms)
+		'speed'			: 600,			//Animation speed (in ms)
+		'title'			: "D'oh!",		//Title
+		'message'		: 'Cowabunga',	//Message (can be HTML)
+		'sticky'		: false,		//Boolean
+		'imgDir'		: 'images/',	//Default directory for bart's images, with trailing slash
+		'css'			: {},			//Any additional CSS parameters, in object notation
+		'animate'		: true,			//Whether to use CSS3 animated bg
+		'callback'		: function(){}	//Callback function after notification closes
 	},
-	options = {}, 				//This object will hold our final plugin settings globally
-	container,					//Container holds the global $(this)
-	wrapper, textSpan, icon, title,	//Variables for caching the DOM elements that make up the annoyifications
-	height, width;				//"Global" vars for holding the dimensions of the annoyification
+	options = {}, 						//This object will hold our final plugin settings 
+	container,							//Container holds the global $(this)
+	wrapper, textSpan, icon, title,		//Variables for caching the DOM elements that make up the annoyifications
+	height, width,						//"Global" vars for holding the dimensions of the annoyification
+	animateSettings = {};				//Will hold settings passed to animate the annoyification
 
-	$.clearClasses = function(elem) {
-		var classes = elem.attr('class');
-		for (var domclass in classes) {
-			//We only want to remove the bart classes
-			if (domclass.test(/^bart_/)) {
-				elem.removeAttr(domclass);
+	 var clearClasses = function(elem) {
+		var classList = elem.attr('class'),
+			pattern = /^bart_/;
+
+		if (classList != undefined) {
+			var classes = classList.split(' ');	
+			for (var domclass in classes) {
+				//We only want to remove the bart classes
+				if (pattern.test(classes[domclass])) {
+					elem.removeClass(classes[domclass]);
+				}
 			}
 		}
-	}
+	};
 
 	//Hide Bart 
-	$.detention = function() {
+	var detention = function() {
 		//Do nothing if he's already in detention 
 		if (wrapper.css('opacity') > 0) {
-			wrapper.animate({options.vposition: '-'+height, options.hposition: '-'+width, 'opacity': 0}, options.speed, options.easing, function() { wrapper.hide(); });
+			if (options.slide == 'vertical') {
+				animateSettings[options.vposition] = '-'+height;
+			} else {
+				animateSettings[options.hposition] = '-'+width;
+			}
+			animateSettings['opacity'] = 0;
+			wrapper.animate(
+				animateSettings, 
+				options.speed, 
+				options.easing, 
+				function() { 
+					wrapper.hide(); 
+				}
+			);
+			animateSettings = {}; //Empty array so we don't get persistent values
+			if ($.isFunction(options.callback)) {
+				options.callback.call(container);
+			}
 		}
-	}
+	};
 
  	$.fn.bart = function(params) {
-		//Store $(this) in a more semantically correct variable. We might need it in other functions anyway
+		//Store $(this) in a more semantically correct variable. 
+		//We might need it in other functions anyway
 		container = $(this);
 
-		options = $.extend(defaults, params);
+		//Merge user options with system options
+		options = $.extend({}, defaults, params);
 
-		if (!$("#bart_wrapper").length) { //This builds our notification into the DOM if it doesn't already exist
-			$("<div>").attr('id', 'bart_wrapper');
-			$("<span>").attr('id', 'bart_text').prependTo("#bart_wrapper");
-			$("<span>").attr('id', 'bart_icon').after("#bart_text");
+		//This builds our notification into the DOM if it doesn't already exist
+		if (!$("#bart_wrapper").length) { 
+			//Add it to the body now so that we can build on it. 
+			//It's hidden by default in the css
+			$("<div>").attr('id', 'bart_wrapper')
+				.appendTo('body');
+			$("<span>").attr('id', 'bart_icon')
+				.appendTo("#bart_wrapper");
 			$("<img>").appendTo("#bart_icon");
-			$("<h3>").attr('id', 'bart_title').after("#bart_icon");
-			$("<span>").attr('id', 'bart_close').appendTo("#bart_wrapper");
-			$("<img>").attr('src', options.imgDir+'close.png').appendTo("#bart_close");
+			$("<h3>").attr('id', 'bart_title')
+				.insertAfter("#bart_icon");
+			$("<span>").attr('id', 'bart_text')
+				.appendTo("#bart_wrapper");
+			$("<span>").attr('id', 'bart_close')
+				.prependTo("#bart_wrapper");
+			$("<img>").attr('src', options.imgDir+'close.png')
+				.appendTo("#bart_close");
 			$("#bart_close").click(function() {
-				$.detention();
+				detention();
 			});
 		} else { //Already exists on page
 			//Clear any old bart classes out
-			$.clearClasses(wrapper);
-			$.clearClasses(icon);
+			clearClasses(wrapper);
+			clearClasses(icon);
+
+			//Empty style def's to erase any previous animation results
+			wrapper.removeAttr('style'); 
 		}
 
 
@@ -76,37 +118,82 @@
 		title = $("#bart_title");
 
 		//Modify for proper display
-		wrapper.addClass('bart_'+options.type);
-		textSpan.html(options.text);
-		icon.addClass('bart_'+options.style).find('img').attr('src', options.imgDir+options.style+'.png');
+		wrapper.addClass('bart_'+options.type)
+			.addClass('bart_'+options.style);
+
+		//Animation?
+		if (!options.animate) {
+			wrapper.addClass('bart_noAnimate');
+		}
+
+		textSpan.html(options.message);
+		icon.find('img')
+			.attr('src', options.imgDir+options.style+'.png');
 		title.text(options.title);
 
-		wrapper.appendTo('body');
+		//Now that we know what style/type it is, we can do some 
+		//calculations in order to animate properly.
+		height = wrapper.height();
+		width  = wrapper.width();
 
-		//Now that we know what style/type it is, we can do some calculations in order to animate properly.
-		height = wrapper.height;
-		width  = wrapper.width;
+		if (options.type == 'modal') {
+			var halfWidth = parseInt(width / 2, 10),
+				halfHeight = parseInt(height / 2, 10);
 
-		if (isNan(options.vposition)) { //handles top or bottom
-			wrapper.css(options.vposition, '-'+height+'px');
+			wrapper.css({
+				'top': '50%', 
+				'left': '50%', 
+				'margin-left': '-'+halfWidth+'px', 
+				'margin-top': '-'+halfHeight+'px'
+			});
 		} else {
-			wrapper.css('top', options.vposition+'px');
-			options.vposition = 'top';
+			if (isNaN(options.vposition)) { //handles top or bottom
+				if (options.slide == 'vertical') {
+					wrapper.css(options.vposition, '-'+height+'px');
+				} else {
+					wrapper.css(options.vposition, 0);
+				}
+			} else {
+				wrapper.css('top', options.vposition+'px');
+				options.vposition = 'top';
+			}
+
+			if (isNaN(options.hposition)) { //handles right or left
+				if (options.slide == 'horizontal') {
+					wrapper.css(options.hposition, '-'+width+'px');
+				} else {
+					wrapper.css(options.hposition, 0);
+				}
+			} else {
+				wrapper.css('left', options.hposition+'px');
+				options.vposition = 'left';
+			}
+
+			if (options.slide == 'vertical') {
+				animateSettings[options.vposition] = 0;
+			} else {
+				animateSettings[options.hposition] = 0;
+			}
+		}
+		animateSettings['opacity'] = options.opacity;
+
+		//If there's any additional CSS passed, apply it here.
+		//All other internal CSS has been applied
+		if (!$.isEmptyObject(options.css)) {
+			wrapper.css(options.css);
 		}
 
-		if (isNan(options.hposition)) { //handles top or bottom
-			wrapper.css(options.hposition, '-'+width+'px');
-		} else {
-			wrapper.css('left', options.hposition+'px');
-			options.vposition = 'left';
-		}
-
-		wrapper.show().animate({options.vposition: 0, options.hposition: 0, 'opacity': options.opacity}, options.speed, options.easing);
+		wrapper.show()
+			.animate(
+				animateSettings, 
+				options.speed, 
+				options.easing
+			);
 
 		//Handle stickiness
 		if(!options.sticky) {
 			setTimeout(function() {
-				$.detention();
+				detention();
 			}, options.duration);
 		}
 
